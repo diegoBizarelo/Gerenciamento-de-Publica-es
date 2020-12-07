@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using LibraryManagement.Interfaces.Service;
+using LibraryManagementCrossCutting.DependencyInjetction;
+using LibraryManagementService.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -25,6 +28,9 @@ namespace LibraryManagementAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddTransient<IAuthorService, AuthorService>();
+            ConfigureRepository.ConfDependenciesRepository(services);
+            //services.AddTransient<IBookService, BookService>();
             services.AddControllers();
         }
 

@@ -1,14 +1,13 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\LibraryManagementCrossCutting\LibraryManagementCrossCutting.csproj" />
+    <ProjectReference Include="..\LibraryManagementDATA\LibraryManagementDATA.csproj" />
     <ProjectReference Include="..\LibraryManagementService\LibraryManagementService.csproj" />
     <ProjectReference Include="..\LibraryManagement\LibraryManagement.csproj" />
   </ItemGroup>
-
 
 </Project>

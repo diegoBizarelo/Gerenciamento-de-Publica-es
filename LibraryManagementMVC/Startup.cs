@@ -12,6 +12,10 @@ using LibraryManagementMVC.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using LibraryManagement.Interfaces.Service;
+using LibraryManagementService.Services;
+using LibraryManagementCrossCutting.DependencyInjetction;
+using LibraryManagement.HttpClients;
 
 namespace LibraryManagementMVC
 {
@@ -27,6 +31,9 @@ namespace LibraryManagementMVC
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddTransient<IAuthorService, AuthorService>();
+            services.AddTransient<HttpClientAuthorsAPI>();
+            ConfigureRepository.ConfDependenciesRepository(services);
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
@@ -62,7 +69,7 @@ namespace LibraryManagementMVC
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Books}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
             });
         }
