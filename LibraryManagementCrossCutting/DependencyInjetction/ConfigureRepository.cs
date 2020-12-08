@@ -16,6 +16,7 @@ namespace LibraryManagementCrossCutting.DependencyInjetction
         {
             serviceCollection.AddScoped(typeof(IRepository<Guid, BaseEntity<Guid>>), typeof(BaseRepository<Guid, BaseEntity<Guid>>));
             serviceCollection.AddScoped<IAuthorRepository, AuthorImplementatios>();
+            serviceCollection.AddScoped<IBookRepository, BookImplementation>();
 
             serviceCollection.AddDbContext<LibraryManagementContext>(
                 options => options.UseSqlServer("Server = (localdb)\\mssqllocaldb;Database=LibraryManagement;Trusted_Connection=True;MultipleActiveResultSets=true")

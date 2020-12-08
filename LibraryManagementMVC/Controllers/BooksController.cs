@@ -1,24 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http;
 using System.Threading.Tasks;
-using LibraryManagementService.HttpClients;
-using LibraryManagement.Interfaces.Service;
 using LibraryManagement.ViewModel;
+using LibraryManagementService.HttpClients;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using Newtonsoft.Json;
 
 namespace LibraryManagementMVC.Controllers
 {
-    public class AuthorsController : Controller
+    public class BooksController : Controller
     {
-        
-        private readonly HttpClientAuthorsAPI _http;
+        private readonly HttpClientBookAPI _http;
 
-        public AuthorsController(HttpClientAuthorsAPI httpApi)
+        public BooksController(HttpClientBookAPI httpApi)
         {
             _http = httpApi;
         }
@@ -26,15 +21,15 @@ namespace LibraryManagementMVC.Controllers
         // GET: AuthorsController
         public async Task<ActionResult> Index()
         {
-            var authors = await _http.GetAll();
-            return View(authors);
+            var books = await _http.GetAll();
+            return View(books);
         }
 
         // GET: AuthorsController/Details/5
         public async Task<ActionResult> Details(Guid id)
         {
-            var author = await _http.Get(id);
-            return View(author);
+            var book = await _http.Get(id);
+            return View(book);
         }
 
         // GET: AuthorsController/Create
@@ -46,11 +41,11 @@ namespace LibraryManagementMVC.Controllers
         // POST: AuthorsController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(AuthorView a)
+        public async Task<ActionResult> Create(BookView b)
         {
             try
             {
-                var author = await _http.Create(a);
+                var author = await _http.Create(b);
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -62,18 +57,18 @@ namespace LibraryManagementMVC.Controllers
         // GET: AuthorsController/Edit/5
         public async Task<ActionResult> Edit(Guid id)
         {
-            var author = await _http.Get(id);
-            return View(author);
+            var book = await _http.Get(id);
+            return View(book);
         }
 
         // POST: AuthorsController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit(AuthorView author)
+        public async Task<ActionResult> Edit(BookView book)
         {
             try
             {
-                var a = await _http.Update(author);
+                var a = await _http.Update(book);
                 return RedirectToAction(nameof(Details), new { id = a.Id });
             }
             catch
@@ -85,18 +80,18 @@ namespace LibraryManagementMVC.Controllers
         // GET: AuthorsController/Delete/5
         public async Task<ActionResult> Delete(Guid id)
         {
-            var a = await _http.Get(id);
-            return View(a);
+            var b = await _http.Get(id);
+            return View(b);
         }
 
         // POST: AuthorsController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Delete(AuthorView author)
+        public async Task<ActionResult> Delete(BookView book)
         {
             try
             {
-                await _http.Delete(author.Id);
+                await _http.Delete(book.Id);
                 return RedirectToAction(nameof(Index));
             }
             catch

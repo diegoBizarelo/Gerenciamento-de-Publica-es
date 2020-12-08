@@ -29,6 +29,7 @@ namespace LibraryManagementAPI
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddTransient<IAuthorService, AuthorService>();
+            services.AddTransient<IBookService, BookService>();
             ConfigureRepository.ConfDependenciesRepository(services);
             //services.AddTransient<IBookService, BookService>();
             services.AddControllers();

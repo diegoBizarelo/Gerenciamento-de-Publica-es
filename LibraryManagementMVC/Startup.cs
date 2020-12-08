@@ -15,7 +15,7 @@ using Microsoft.Extensions.Hosting;
 using LibraryManagement.Interfaces.Service;
 using LibraryManagementService.Services;
 using LibraryManagementCrossCutting.DependencyInjetction;
-using LibraryManagement.HttpClients;
+using LibraryManagementService.HttpClients;
 
 namespace LibraryManagementMVC
 {
@@ -32,13 +32,18 @@ namespace LibraryManagementMVC
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddTransient<IAuthorService, AuthorService>();
-            services.AddTransient<HttpClientAuthorsAPI>();
             ConfigureRepository.ConfDependenciesRepository(services);
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
+            services.AddHttpClient<HttpClientAuthorsAPI>(client => {
+                client.BaseAddress = new Uri("https://localhost:44392/api/authors/");
+            });
+            services.AddHttpClient<HttpClientBookAPI>(client => {
+                client.BaseAddress = new Uri("https://localhost:44392/api/books/");
+            });
             services.AddControllersWithViews();
             services.AddRazorPages();
         }
@@ -69,7 +74,7 @@ namespace LibraryManagementMVC
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Books}/{action=Index}/{id?}");
+                    pattern: "{controller=Authors}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
             });
         }
