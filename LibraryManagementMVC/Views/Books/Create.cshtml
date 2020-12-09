@@ -28,6 +28,16 @@
                 <span asp-validation-for="Year" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label>Select authors for this book</label>
+                <br />
+                <select id="authors" asp-for="Authors" multiple class="form-control">
+                    @foreach (var a in Model.Authors)
+                    {
+                        <option value="@a.Id">@($"{a.Name} {a.LastName}")</option>
+                    }
+                </select>
+            </div>
+            <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
         </form>
@@ -40,4 +50,9 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{await Html.RenderPartialAsync("_ScriptsMunitinho");}
 }
+
+
+
+

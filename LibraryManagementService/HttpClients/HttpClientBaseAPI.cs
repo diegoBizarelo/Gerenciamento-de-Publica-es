@@ -9,7 +9,7 @@ namespace LibraryManagementService.HttpClients
 {
     public class HttpClientBaseAPI<T>
     {
-        private readonly HttpClient _httpClient;
+        protected readonly HttpClient _httpClient;
         private T _obj;
         public HttpClientBaseAPI(HttpClient httpClient)
         {
@@ -18,15 +18,15 @@ namespace LibraryManagementService.HttpClients
         }
         public async Task<IEnumerable<T>> GetAll()
         {
-            var authors = new List<T>();
+            var r = new List<T>();
 
             using (var response = await _httpClient.GetAsync(""))
             {
                 string apiResponse = await response.Content.ReadAsStringAsync();
-                authors = JsonConvert.DeserializeObject<List<T>>(apiResponse);
+                r = JsonConvert.DeserializeObject<List<T>>(apiResponse);
             }
 
-            return authors;
+            return r;
         }
 
         public async Task<T> Get(Guid id)

@@ -1,18 +1,14 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using AutoMapper;
 using LibraryManagement.Interfaces.Service;
+using LibraryManagement.Models;
+using LibraryManagement.ViewModel;
 using LibraryManagementCrossCutting.DependencyInjetction;
 using LibraryManagementService.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 
 namespace LibraryManagementAPI
 {
@@ -31,8 +27,14 @@ namespace LibraryManagementAPI
             services.AddTransient<IAuthorService, AuthorService>();
             services.AddTransient<IBookService, BookService>();
             ConfigureRepository.ConfDependenciesRepository(services);
-            //services.AddTransient<IBookService, BookService>();
             services.AddControllers();
+            services.AddControllers().AddNewtonsoftJson(x => x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+            var config = new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<AuthorView, Author>();
+            });
+            IMapper mapper = config.CreateMapper();
+            services.AddSingleton(mapper);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

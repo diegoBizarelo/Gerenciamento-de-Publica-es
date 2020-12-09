@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using LibraryManagement.Interfaces.Service;
 using LibraryManagement.Models;
-using Microsoft.AspNetCore.Http;
+using LibraryManagement.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LibraryManagementAPI.Controllers
@@ -37,8 +36,7 @@ namespace LibraryManagementAPI.Controllers
                 return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
             }
         }
-
-        // GET api/<AuthoresController>/5
+        
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(Book), 200)]
         public async Task<IActionResult> Get(Guid id)
@@ -60,15 +58,16 @@ namespace LibraryManagementAPI.Controllers
 
         // POST api/<AuthoresController>
         [HttpPost]
-        public async Task<IActionResult> Post(Book book)
+        public async Task<IActionResult> Post(BookView book)
         {
+            var b = BookViewToBook(book);
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
             try
             {
-                var result = await _bookService.Post(book);
+                var result = await _bookService.Post(b);
                 if (result != null)
                 {
                     return CreatedAtAction(nameof(Get), new { id = result.Id }, result);
@@ -79,6 +78,29 @@ namespace LibraryManagementAPI.Controllers
             {
                 return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
             }
+        }
+
+        private Book BookViewToBook(BookView book)
+        {
+            var b = new Book()
+            {
+                Id = Guid.NewGuid(),
+                Title = book.Title,
+                ISBN = book.ISBN,
+                Year = (int) book.Year,
+            };
+            var bookAuthor = new List<BookAuthor>();
+            foreach (var a in book.Authors)
+            {
+                var ba = new BookAuthor()
+                {
+                    AuthorId = a.Id,
+                    BookId = b.Id,
+                };
+                bookAuthor.Add(ba);
+            }
+            b.BooksAuthors = bookAuthor;
+            return b;
         }
 
         // PUT api/<AuthoresController>/5

@@ -11,5 +11,10 @@ namespace LibraryManagement.Models
         public string Email { get; set; }
         public DateTime BirthDay { get; set; }
         public IEnumerable<BookAuthor> BooksAuthors { get; set; }
+
+        public Author()
+        {
+            BooksAuthors = new List<BookAuthor>();
+        }
     }
 }

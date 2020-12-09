@@ -12,7 +12,7 @@ namespace LibraryManagementDATA.Repository
     public class BaseRepository<Tkey, T> : IRepository<Tkey, T> where T : BaseEntity<Tkey>
     {
         protected readonly LibraryManagementContext _db;
-        private readonly DbSet<T>  _dbSet;
+        protected readonly DbSet<T>  _dbSet;
 
         public BaseRepository(LibraryManagementContext db)
         {
@@ -33,7 +33,7 @@ namespace LibraryManagementDATA.Repository
             return true;
         }
 
-        public async Task<T> InsetAsync(T item)
+        public virtual async Task<T> InsetAsync(T item)
         {
             try
             {
@@ -53,13 +53,13 @@ namespace LibraryManagementDATA.Repository
             await _db.SaveChangesAsync();
         }
 
-        public async Task<T> SelectAsync(Tkey id)
+        public virtual async Task<T> SelectAsync(Tkey id)
         {
             var entity = await _dbSet.FindAsync(id);
             return entity ?? null;
         }
 
-        public async Task<IEnumerable<T>> SelectAsync()
+        public virtual async Task<IEnumerable<T>> SelectAsync()
         {
             try
             {

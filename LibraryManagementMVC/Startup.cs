@@ -1,12 +1,7 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.EntityFrameworkCore;
 using LibraryManagementMVC.Data;
 using Microsoft.Extensions.Configuration;
@@ -16,6 +11,9 @@ using LibraryManagement.Interfaces.Service;
 using LibraryManagementService.Services;
 using LibraryManagementCrossCutting.DependencyInjetction;
 using LibraryManagementService.HttpClients;
+using AutoMapper;
+using LibraryManagement.ViewModel;
+using LibraryManagement.Models;
 
 namespace LibraryManagementMVC
 {
@@ -38,12 +36,22 @@ namespace LibraryManagementMVC
                     Configuration.GetConnectionString("DefaultConnection")));
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
+
+            /*services.AddMvc(option => option.EnableEndpointRouting = false)
+                    .AddNewtonsoftJson(opt => opt.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);*/
+
             services.AddHttpClient<HttpClientAuthorsAPI>(client => {
                 client.BaseAddress = new Uri("https://localhost:44392/api/authors/");
             });
             services.AddHttpClient<HttpClientBookAPI>(client => {
                 client.BaseAddress = new Uri("https://localhost:44392/api/books/");
             });
+            var config = new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<AuthorView, Author>();
+            });
+            IMapper mapper = config.CreateMapper();
+            services.AddSingleton(mapper);
             services.AddControllersWithViews();
             services.AddRazorPages();
         }
@@ -74,7 +82,7 @@ namespace LibraryManagementMVC
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Authors}/{action=Index}/{id?}");
+                    pattern: "{controller=Books}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
             });
         }

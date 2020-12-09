@@ -10,5 +10,10 @@ namespace LibraryManagement.Models
         public string ISBN { get; set; }
         public int Year { get; set; }
         public IEnumerable<BookAuthor> BooksAuthors { get; set; }
+
+        public Book()
+        {
+            BooksAuthors = new List<BookAuthor>();
+        }
     }
 }
