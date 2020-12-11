@@ -26,6 +26,9 @@ namespace LibraryManagementMVC.Controllers
             {
                 using (var response = await httpclient.PostAsync("https://localhost:44392/api/Login", content))
                 {
+                    if (!response.IsSuccessStatusCode) {
+                        return Unauthorized();
+                    }
                     string apiResponse = await response.Content.ReadAsStringAsync();
                     TokenGenerate.Token = apiResponse;
                 }

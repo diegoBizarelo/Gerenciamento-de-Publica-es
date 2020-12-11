@@ -6,10 +6,12 @@ using AutoMapper;
 using LibraryManagement.Models;
 using LibraryManagement.ViewModel;
 using LibraryManagementService.HttpClients;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LibraryManagementMVC.Controllers
 {
+    [Authorize]
     public class BooksController : Controller
     {
         private readonly HttpClientBookAPI _http;
@@ -37,10 +39,12 @@ namespace LibraryManagementMVC.Controllers
         private BookView ConvertBook(Book b)
         {
             var authorView = new List<AuthorView>();
-            foreach (var a in b.BooksAuthors)
-            {
-                authorView.Add(Convert(a.Author));
-            }
+           
+                foreach (var a in b.BooksAuthors)
+                {
+                    authorView.Add(Convert(a.Author));
+                }
+            
             var bookView = new BookView()
             {
                 Id = b.Id,
@@ -80,9 +84,12 @@ namespace LibraryManagementMVC.Controllers
         {
             var books = await _http.GetAll();
             var booksView = new List<BookView>();
-            foreach (var b in books)
+            if (books != null)
             {
-                booksView.Add(ConvertBook(b));
+                foreach (var b in books)
+                {
+                    booksView.Add(ConvertBook(b));
+                }
             }
             return View(booksView);
         }

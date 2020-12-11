@@ -5,9 +5,11 @@ using LibraryManagementService.HttpClients;
 using LibraryManagement.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 using LibraryManagement.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace LibraryManagementMVC.Controllers
 {
+    [Authorize]
     public class AuthorsController : Controller
     {
         
@@ -52,9 +54,12 @@ namespace LibraryManagementMVC.Controllers
         {
             var authors = await _http.GetAll();
             var authorsView = new List<AuthorView>();
-            foreach (var a in authors)
+            if (authors != null)
             {
-                authorsView.Add(Convert(a));
+                foreach (var a in authors)
+                {
+                    authorsView.Add(Convert(a));
+                }
             }
             return View(authorsView);
         }
