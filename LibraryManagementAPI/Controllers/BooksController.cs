@@ -48,7 +48,8 @@ namespace LibraryManagementAPI.Controllers
 
             try
             {
-                return Ok(await _bookService.Get(id));
+                var l = await _bookService.Get(id);
+                return Ok(l);
             }
             catch (ArgumentException e)
             {
@@ -58,16 +59,16 @@ namespace LibraryManagementAPI.Controllers
 
         // POST api/<AuthoresController>
         [HttpPost]
-        public async Task<IActionResult> Post(BookView book)
+        public async Task<IActionResult> Post(Book book)
         {
-            var b = BookViewToBook(book);
+            //var b = BookViewToBook(book);
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
             try
             {
-                var result = await _bookService.Post(b);
+                var result = await _bookService.Post(book);
                 if (result != null)
                 {
                     return CreatedAtAction(nameof(Get), new { id = result.Id }, result);

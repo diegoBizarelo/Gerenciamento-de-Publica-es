@@ -1,4 +1,5 @@
-﻿using LibraryManagement.ViewModel;
+﻿using LibraryManagement.Models;
+using LibraryManagement.ViewModel;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -8,27 +9,22 @@ using System.Threading.Tasks;
 
 namespace LibraryManagementService.HttpClients
 {
-    public class HttpClientBookAPI : HttpClientBaseAPI<BookView>
+    public class HttpClientBookAPI : HttpClientBaseAPI<Book>
     {
         public HttpClientBookAPI(HttpClient httpClient) : base(httpClient)
         {
 
         }
 
-        /*public async Task<BookView> GetAllAuthors()
+        /*public override async Task<Book> Create(Book b)
         {
-            var book = new BookView();
-            var authors = new List<AuthorView>();
-            
-            using (var response = await _httpClient.GetAsync(""))
+            StringContent content = new StringContent(JsonConvert.SerializeObject(b), Encoding.UTF8, "application/json");
+            using (var response = await _httpClient.PostAsync("", content))
             {
                 string apiResponse = await response.Content.ReadAsStringAsync();
-                authors = JsonConvert.DeserializeObject<List<AuthorView>>(apiResponse);
+                _obj = JsonConvert.DeserializeObject<Book>(apiResponse);
             }
-
-            book.Authors = authors;
-
-            return book;
+            return _obj;
         }*/
     }
 }

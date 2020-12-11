@@ -36,6 +36,35 @@ namespace LibraryManagementDATA.Implementations
             }
         }
 
+        public override async Task<Book> UpdateAsnyc(Book item)
+        {
+            try
+            {
+                var result = await _dbSet.SingleOrDefaultAsync(e => e.Id.Equals(item.Id));
+                await _db.Set<Author>().Include(a => a.BooksAuthors).ThenInclude(b => b.Author).ToListAsync();
+                if (result == null)
+                {
+                    return null;
+                }
+                
+                    
+                //result.Include(a => a.BooksAuthors).ThenInclude(b => b.Author)
+                item.UpdateAt = DateTime.UtcNow;
+                item.CreateAt = result.CreateAt;
+                result.BooksAuthors = item.BooksAuthors;
+                //_dbSet.Update(item);
+                _db.Entry(result).CurrentValues.SetValues(item);
+                //await _db.Set<BookAuthor>().AddRangeAsync(item.BooksAuthors);
+                await _db.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+
+            return item;
+        }
+
 
     }
 }

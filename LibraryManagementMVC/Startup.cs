@@ -14,6 +14,7 @@ using LibraryManagementService.HttpClients;
 using AutoMapper;
 using LibraryManagement.ViewModel;
 using LibraryManagement.Models;
+using Newtonsoft.Json;
 
 namespace LibraryManagementMVC
 {
@@ -37,8 +38,8 @@ namespace LibraryManagementMVC
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
-            /*services.AddMvc(option => option.EnableEndpointRouting = false)
-                    .AddNewtonsoftJson(opt => opt.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);*/
+            services.AddMvc(option => option.EnableEndpointRouting = false)
+                    .AddNewtonsoftJson(opt => opt.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
 
             services.AddHttpClient<HttpClientAuthorsAPI>(client => {
                 client.BaseAddress = new Uri("https://localhost:44392/api/authors/");
@@ -48,7 +49,7 @@ namespace LibraryManagementMVC
             });
             var config = new MapperConfiguration(cfg =>
             {
-                cfg.CreateMap<AuthorView, Author>();
+                cfg.CreateMap<BookView, Book>();
             });
             IMapper mapper = config.CreateMapper();
             services.AddSingleton(mapper);

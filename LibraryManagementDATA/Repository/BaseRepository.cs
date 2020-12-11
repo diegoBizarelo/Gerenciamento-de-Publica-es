@@ -20,7 +20,7 @@ namespace LibraryManagementDATA.Repository
             _dbSet = _db.Set<T>();
         }
 
-        public async Task<bool> DeleteAsync(Tkey id)
+        public virtual async Task<bool> DeleteAsync(Tkey id)
         {
             var result = await _dbSet.SingleOrDefaultAsync(e => e.Id.Equals(id));
             if (result == null)
@@ -48,7 +48,7 @@ namespace LibraryManagementDATA.Repository
             }
         }
 
-        public async Task SaveAsyncChanges()
+        public virtual async Task SaveAsyncChanges()
         {
             await _db.SaveChangesAsync();
         }
@@ -71,7 +71,7 @@ namespace LibraryManagementDATA.Repository
             }
         }
 
-        public async Task<T> UpdateAsnyc(T item)
+        public virtual async Task<T> UpdateAsnyc(T item)
         {
             try
             {

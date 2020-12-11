@@ -12,5 +12,11 @@ namespace LibraryManagement.ViewModel
         public string ISBN { get; set; }
         public int? Year { get; set; }
         public IEnumerable<AuthorView> Authors { get; set; }
+        
+
+        public BookView()
+        {
+            Authors = new List<AuthorView>();
+        }
     }
 }

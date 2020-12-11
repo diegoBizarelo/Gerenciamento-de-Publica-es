@@ -10,13 +10,13 @@ namespace LibraryManagementService.HttpClients
     public class HttpClientBaseAPI<T>
     {
         protected readonly HttpClient _httpClient;
-        private T _obj;
+        protected T _obj;
         public HttpClientBaseAPI(HttpClient httpClient)
         {
             _httpClient = httpClient;
             
         }
-        public async Task<IEnumerable<T>> GetAll()
+        public virtual async Task<IEnumerable<T>> GetAll()
         {
             var r = new List<T>();
 
@@ -29,7 +29,7 @@ namespace LibraryManagementService.HttpClients
             return r;
         }
 
-        public async Task<T> Get(Guid id)
+        public virtual async Task<T> Get(Guid id)
         {
             using (var response = await _httpClient.GetAsync($"{id}"))
             {
@@ -40,7 +40,7 @@ namespace LibraryManagementService.HttpClients
             return _obj;
         }
 
-        public async Task<T> Create(T a)
+        public virtual async Task<T> Create(T a)
         {
             StringContent content = new StringContent(JsonConvert.SerializeObject(a), Encoding.UTF8, "application/json");
             using (var response = await _httpClient.PostAsync("", content))
@@ -51,7 +51,7 @@ namespace LibraryManagementService.HttpClients
             return _obj;
         }
 
-        public async Task<T> Update(T a)
+        public virtual async Task<T> Update(T a)
         {
             StringContent content = new StringContent(JsonConvert.SerializeObject(a), Encoding.UTF8, "application/json");
             using (var response = await _httpClient.PutAsync("", content))
@@ -62,7 +62,7 @@ namespace LibraryManagementService.HttpClients
             return _obj;
         }
 
-        public async Task<bool> Delete(Guid id)
+        public virtual async Task<bool> Delete(Guid id)
         {
             var r = false;
             using (var response = await _httpClient.DeleteAsync($"{id}"))

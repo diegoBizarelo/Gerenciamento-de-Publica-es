@@ -12,7 +12,7 @@
     <div class="col-md-4">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id"/>
+            <input type="hidden" asp-for="Id" />
             <div class="form-group">
                 <label asp-for="Title" class="control-label"></label>
                 <input asp-for="Title" class="form-control" />
@@ -29,10 +29,28 @@
                 <span asp-validation-for="Year" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <label>Select authors for this book</label>
+                <br />
+                <select id="authors" asp-for="Authors" multiple class="form-control">
+                    @foreach (var a in Model.Authors)
+                    {
+                        @if (a.Select)
+                        {
+                            <option value="@a.Id" selected>@($"{a.Name} {a.LastName}")</option>
+                        }
+                        else
+                        {
+                            <option value="@a.Id">@($"{a.Name} {a.LastName}")</option>
+                        }
+
+                    }
+                </select>
             </div>
-        </form>
+    <div class="form-group">
+        <input type="submit" value="Save" class="btn btn-primary" />
     </div>
+    </form>
+</div>
 </div>
 
 <div>
@@ -41,4 +59,5 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{await Html.RenderPartialAsync("_ScriptsMunitinho");}
 }

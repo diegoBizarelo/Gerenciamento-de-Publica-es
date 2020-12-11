@@ -12,5 +12,12 @@ namespace LibraryManagement.ViewModel
         public string Email { get; set; }
         public DateTime BirthDay { get; set; }
         public IEnumerable<BookView> Books { get; set; }
+
+        public bool Select { get; set; }
+        public AuthorView()
+        {
+            Select = false;
+            Books = new List<BookView>();
+        }
     }
 }

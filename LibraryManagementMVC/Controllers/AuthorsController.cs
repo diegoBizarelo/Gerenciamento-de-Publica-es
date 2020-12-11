@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
+using LibraryManagement.Models;
 
 namespace LibraryManagementMVC.Controllers
 {
@@ -23,18 +24,53 @@ namespace LibraryManagementMVC.Controllers
             _http = httpApi;
         }
 
+        private BookView ConvertBook(Book b)
+        {
+            var authorView = new List<AuthorView>();
+            foreach (var a in b.BooksAuthors)
+            {
+                authorView.Add(Convert(a.Author));
+            }
+            var bookView = new BookView()
+            {
+                Id = b.Id,
+                Title = b.Title,
+                ISBN = b.ISBN,
+                Year = b.Year,
+                Authors = authorView,
+            };
+            return bookView;
+        }
+        private AuthorView Convert(Author a)
+        {
+            var authorView = new AuthorView()
+            {
+                Name = a.Name,
+                LastName = a.LastName,
+                BirthDay = a.BirthDay,
+                Email = a.Email,
+                Id = a.Id,
+            };
+            return authorView;
+        }
         // GET: AuthorsController
         public async Task<ActionResult> Index()
         {
             var authors = await _http.GetAll();
-            return View(authors);
+            var authorsView = new List<AuthorView>();
+            foreach (var a in authors)
+            {
+                authorsView.Add(Convert(a));
+            }
+            return View(authorsView);
         }
 
         // GET: AuthorsController/Details/5
         public async Task<ActionResult> Details(Guid id)
         {
             var author = await _http.Get(id);
-            return View(author);
+            var authorView = Convert(author);
+            return View(authorView);
         }
 
         // GET: AuthorsController/Create
@@ -46,7 +82,7 @@ namespace LibraryManagementMVC.Controllers
         // POST: AuthorsController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(AuthorView a)
+        public async Task<ActionResult> Create(Author a)
         {
             try
             {
@@ -69,7 +105,7 @@ namespace LibraryManagementMVC.Controllers
         // POST: AuthorsController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit(AuthorView author)
+        public async Task<ActionResult> Edit(Author author)
         {
             try
             {
