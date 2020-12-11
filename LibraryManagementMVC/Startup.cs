@@ -83,7 +83,7 @@ namespace LibraryManagementMVC
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Books}/{action=Index}/{id?}");
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
             });
         }

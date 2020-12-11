@@ -5,12 +5,14 @@ using System.Threading.Tasks;
 using LibraryManagement.Interfaces.Service;
 using LibraryManagement.Models;
 using LibraryManagement.ViewModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LibraryManagementAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class BooksController : ControllerBase
     {
         private readonly IBookService _bookService;

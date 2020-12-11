@@ -15,16 +15,5 @@ namespace LibraryManagementService.HttpClients
         {
 
         }
-
-        /*public override async Task<Book> Create(Book b)
-        {
-            StringContent content = new StringContent(JsonConvert.SerializeObject(b), Encoding.UTF8, "application/json");
-            using (var response = await _httpClient.PostAsync("", content))
-            {
-                string apiResponse = await response.Content.ReadAsStringAsync();
-                _obj = JsonConvert.DeserializeObject<Book>(apiResponse);
-            }
-            return _obj;
-        }*/
     }
 }

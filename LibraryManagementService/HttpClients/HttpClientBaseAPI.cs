@@ -1,7 +1,9 @@
-﻿using Newtonsoft.Json;
+﻿using LibraryManagement.Token;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -14,12 +16,11 @@ namespace LibraryManagementService.HttpClients
         public HttpClientBaseAPI(HttpClient httpClient)
         {
             _httpClient = httpClient;
-            
         }
         public virtual async Task<IEnumerable<T>> GetAll()
         {
             var r = new List<T>();
-
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", TokenGenerate.Token);
             using (var response = await _httpClient.GetAsync(""))
             {
                 string apiResponse = await response.Content.ReadAsStringAsync();
@@ -31,6 +32,7 @@ namespace LibraryManagementService.HttpClients
 
         public virtual async Task<T> Get(Guid id)
         {
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", TokenGenerate.Token);
             using (var response = await _httpClient.GetAsync($"{id}"))
             {
                 string apiResponse = await response.Content.ReadAsStringAsync();
@@ -43,6 +45,7 @@ namespace LibraryManagementService.HttpClients
         public virtual async Task<T> Create(T a)
         {
             StringContent content = new StringContent(JsonConvert.SerializeObject(a), Encoding.UTF8, "application/json");
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", TokenGenerate.Token);
             using (var response = await _httpClient.PostAsync("", content))
             {
                 string apiResponse = await response.Content.ReadAsStringAsync();
@@ -54,6 +57,7 @@ namespace LibraryManagementService.HttpClients
         public virtual async Task<T> Update(T a)
         {
             StringContent content = new StringContent(JsonConvert.SerializeObject(a), Encoding.UTF8, "application/json");
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", TokenGenerate.Token);
             using (var response = await _httpClient.PutAsync("", content))
             {
                 string apiResponse = await response.Content.ReadAsStringAsync();
@@ -65,6 +69,7 @@ namespace LibraryManagementService.HttpClients
         public virtual async Task<bool> Delete(Guid id)
         {
             var r = false;
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", TokenGenerate.Token);
             using (var response = await _httpClient.DeleteAsync($"{id}"))
             {
                 string apiResponse = await response.Content.ReadAsStringAsync();

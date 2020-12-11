@@ -1,15 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
 using System.Threading.Tasks;
 using LibraryManagementService.HttpClients;
-using LibraryManagement.Interfaces.Service;
 using LibraryManagement.ViewModel;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using Newtonsoft.Json;
 using LibraryManagement.Models;
 
 namespace LibraryManagementMVC.Controllers
@@ -99,7 +93,8 @@ namespace LibraryManagementMVC.Controllers
         public async Task<ActionResult> Edit(Guid id)
         {
             var author = await _http.Get(id);
-            return View(author);
+            var authorView = Convert(author);
+            return View(authorView);
         }
 
         // POST: AuthorsController/Edit/5
@@ -110,7 +105,8 @@ namespace LibraryManagementMVC.Controllers
             try
             {
                 var a = await _http.Update(author);
-                return RedirectToAction(nameof(Details), new { id = a.Id });
+                var authorView = Convert(a);
+                return RedirectToAction(nameof(Details), new { id = authorView.Id });
             }
             catch
             {
@@ -122,7 +118,8 @@ namespace LibraryManagementMVC.Controllers
         public async Task<ActionResult> Delete(Guid id)
         {
             var a = await _http.Get(id);
-            return View(a);
+            var authorView = Convert(a);
+            return View(authorView);
         }
 
         // POST: AuthorsController/Delete/5

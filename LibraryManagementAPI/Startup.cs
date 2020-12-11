@@ -4,12 +4,15 @@ using LibraryManagement.Models;
 using LibraryManagement.ViewModel;
 using LibraryManagementCrossCutting.DependencyInjetction;
 using LibraryManagementService.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using System.Text;
 
 namespace LibraryManagementAPI
 {
@@ -36,6 +39,31 @@ namespace LibraryManagementAPI
             });
             IMapper mapper = config.CreateMapper();
             services.AddSingleton(mapper);
+
+            var appsetings = Configuration.GetSection("AppSettings");
+            services.Configure<AppSettings>(appsetings);
+            var appseting = appsetings.Get<AppSettings>();
+
+            services.AddAuthentication(Options =>
+            {
+                Options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                Options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                Options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+                .AddJwtBearer(options =>
+                {
+                    options.SaveToken = true;
+                    options.RequireHttpsMetadata = false;
+                    options.TokenValidationParameters = new TokenValidationParameters()
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidAudience = "https://www.infnet.edu.br",
+                        ValidIssuer = "https://www.infnet.edu.br",
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("assessmentWebAPIandMVC"))
+                    };
+                });
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo
@@ -69,7 +97,15 @@ namespace LibraryManagementAPI
             app.UseHttpsRedirection();
 
             app.UseRouting();
+            app.UseCors(builder =>
+            {
+                builder
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader();
+            });
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
